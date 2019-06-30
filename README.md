@@ -39,3 +39,18 @@ For this classifier we consider four GMMs based on covariance matrix constraints
  
 After training GMMs for each case, a test pattern is classified by assigning it to the gaussian component for which it has the maximum posterior probability, and consequently it is assigned to the class represented by that component.
 In order to choose the best combination (Shared/unshared - Diagonal/full), validation set patterns are classified for each GMM. The best model is choosen based on accuracy, and it is used to classify test set patterns.
+
+
+3. GMM_Classifier_separate_training_set
+
+First of all a range for k value is set (e.g. k = 1:15), then training set is divided in two subset, training_set_1 that contains only the positive patterns (class 1) and training_set_0 that includes only the negative ones (class 0). Then for each k value two GMMs are trained, one for training set 1 (GMM1) and the other for training set 0 (GMM0). Training set 1 patterns are clusterized according to GMM1 and training set 0 pattern are clusterized according to GMM0. After session training we obtain 2 * k GMMs, since for each k we have 2 GMMs. 
+
+Test pattern is classified in the following way:
+ - Test pattern is assigned to a cluster of training set 1 according to maximum posterior probability relative to GMM1 (P1);
+ - Test pattern is assigned to a cluster of training set 0 according to maximum posteriory probability relative to GMM0 (P0);
+ - if P1 > P0
+      pattern is classified as positive
+   else
+      pattern is classified as negative
+      
+Validation set pattern are classified by using this procedure k times, and we choose the best model (that is the best k) according to classification accuracy. Finally test set patterns are classified by using the best model.
