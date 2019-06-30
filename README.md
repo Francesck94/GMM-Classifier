@@ -7,6 +7,7 @@ Three type of classifier are implemented:
 2) GMM_Classifier_two_components
 3) GMM_Classifier_separate_training_set
 
+GMM model is trained by using EM algorithm.
 For this kind of classifier, dataset is divided in three disjoint sets:
 - training set, for  training;
 - validation set, for selection of best parameters;
@@ -28,4 +29,13 @@ Finally this model is used to classify test set patterns.
 
 2. GMM_Classifier_two_components
 
-The value of k parameter is set to 2, that is only two guassian components for GMM. 
+The value of k parameter is set to 2, that is GMM model will be composed only by two gaussian components. The idea is that first component will describe positive class and second components negative class. In order to obtain this achievement, initial values of guassian components parameters (covariance matrix and mean) are set according the distribution of training set pattern (e.g. for first components the initial mean value will be the mean between training set pattern of class 1).
+
+For this classifier we consider four GMMs based on covariance matrix constraints:
+ 1) Shared Covariance - Diagonal (Covariance matrix is the same for the two guassian components and it must be diagonal)
+ 2) Unshared Covariance - Diagonal (Covariance matrix is not the same for the two guassian components and it must be diagonal)
+ 3) Shared Covariance - Full (Covariance matrix is the same for the two guassian components and it must be full)
+ 4) Unshared Covariance - Full (Covariance matrix is not the same for the two guassian components and it must be full)
+ 
+After training GMMs for each case, a test pattern is classified by assigning it to the gaussian component for which it has the maximum posterior probability, and consequently it is assigned to the class represented by that component.
+In order to choose the best combination (Shared/unshared - Diagonal/full), validation set patterns are classified for each GMM. The best model is choosen based on accuracy, and it is used to classify test set patterns.
